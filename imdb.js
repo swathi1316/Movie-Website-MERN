@@ -7,7 +7,7 @@ const instance = axios.create({
   },
 });
 
-const searchTitle = 'RRR';
+const searchTitle = 'The Game of Thrones';
 const searchMovie = async (title) => {
   const response = await instance.get('en/API/AdvancedSearch/', {
     params: {

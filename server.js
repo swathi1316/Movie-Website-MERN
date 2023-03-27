@@ -21,19 +21,3 @@ export default app
 
 
 
-
-// const express = require('express');
-// const app = express();
-
-// app.use(cors())
-// app.use(express.json())
-
-// app.use("*", (req, res) => res.status(404).json({ error: "Unable to connect"}))
-
-// module.exports = app
-
-
-// import app from "./server.js"
-// app.listen(port,() => {
-//     console.log(`listening on port ${port}`)
-// })
