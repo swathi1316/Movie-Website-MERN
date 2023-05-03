@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { loginUser } from '../services/authService.js';
@@ -8,7 +8,9 @@ import { loginUser } from '../services/authService.js';
 function Login({ setLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const history = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+
 
   async function handleLoginSubmit(event) {
     event.preventDefault();
@@ -18,7 +20,16 @@ function Login({ setLoggedIn }) {
       localStorage.setItem('token', token);
       console.log("local storage",localStorage);
       setLoggedIn(true);
-      history('/');
+      console.log("location pathname,", location.pathname);
+      console.log("location state",location.state?.from);
+      const from = location.state?.from || '/';
+      const text = location.state?.text || '';
+      console.log("text jh,",text);
+      navigate(-1, { 
+        state: { 
+          text: location.state?.text // pass the saved text back to previous page
+        }
+      });
     } catch (error) {
       console.error(error);
       throw new Error('Invalid email or password.');

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import http from '../http-common';
 import ReviewList from './getReviews.js';
 import ReviewForm from './addReview.js';
+import RatingForm from './addRating.js';
+import jwt_decode from 'jwt-decode';
 
 function MovieReviews(props) {
   const [reviews, setReviews] = useState([]);
+  const [ratings, setRatings] = useState([]);
   const [currentUserId, setCurrentUserId] = useState('');
 
   useEffect(() => {
@@ -21,8 +24,17 @@ function MovieReviews(props) {
     fetchReviews();
   }, [props.movieId]);
 
-  const addReview = (review, username) => {
-    setReviews([...reviews, { ...review, username }])
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      setCurrentUserId(decodedToken.userId);
+    }
+  }, []);
+
+  const addReview = (review) => {
+    setReviews([...reviews, review]);
   };
 
   const updateReview = (updatedReview) => {
@@ -36,19 +48,45 @@ function MovieReviews(props) {
   };
 
   const deleteReview = (deletedReview) => {
+    console.log("delete review,",deleteReview);
+    const filterReviews = reviews.filter(review => review._id === deletedReview._id);
+    console.log("filter Reviews,",filterReviews);
     const filteredReviews = reviews.filter(review => review._id !== deletedReview._id);
     setReviews(filteredReviews);
   };
 
+
+
+  useEffect(() => {
+    console.log('Ratings have been updated:', ratings);
+  }, [ratings]);
+
+  const addRating = async (rating) => {
+    console.log("rating in addRating,",rating);
+    setRatings([...ratings, rating]);
+  };
+
+  const updateRating = async (updatedRating) => {
+      const updatedRatings = ratings.map(rating => {
+        if (rating._id === updatedRating._id) {
+          return updatedRating;
+        }
+        return rating;
+      });
+      setRatings(updatedRatings);
+  };
+
   return (
     <div>
-      <ReviewList reviews={reviews} deleteReview={deleteReview} />
-      <ReviewForm movieId={props.movieId} reviews={reviews} addReview={addReview} updateReview={updateReview} />
+      <ReviewList reviews={reviews} ratings ={ratings} deleteReview={deleteReview} movieId = {props.movieId} userId ={currentUserId} />
+      <ReviewForm movieId={props.movieId} reviews={reviews} addReview={addReview} updateReview={updateReview}/>
+      <RatingForm movieId={props.movieId} ratings = {ratings} addRating={addRating} updateRating={updateRating} />
     </div>
   );
 }
 
 export default MovieReviews;
+
 
 
 

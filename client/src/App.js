@@ -11,10 +11,14 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import Navbar from './components/Navbar.js';
 import { useNavigate } from 'react-router-dom';
 import PopularMovies from './components/popularMovies.js';
+import MultiSearch from './components/multiSearch.js';
+import TvShowDetails from './components/tvShowDetails.js';
+import PeopleDetails from './components/peopleDetails.js';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false);
- 
+  const [tvMedia,setTvMedia] = useState([]);
+  const [peopleMedia,setPeopleMedia] = useState([]);
   return (
     <Router>
       <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -25,6 +29,12 @@ function App() {
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route path="/register" Component={Register} />
           <Route path="/popular" Component={PopularMovies} />
+          <Route path="/multiSearch" element={<MultiSearch  tvMedia={tvMedia} setTvMedia ={setTvMedia}  peopleMedia={peopleMedia} setPeopleMedia ={setPeopleMedia} />}/>
+          <Route path="/tv/:id" element={<TvShowDetails tvMedia={tvMedia}/>} />
+          <Route path="/person/:id" Component={PeopleDetails} />
+
+
+
         </Routes>
       </div>
     </Router>
@@ -34,42 +44,3 @@ function App() {
 export default App;
 
 
-        {/* <Route path="/login" Component={Login}> */}
-        {/* {isLoggedIn ? (
-          <Redirect to="/" />
-        ) : (
-          <Login onSubmit={handleLoginSubmit} />
-        )} */}
-        {/* </Route> */}
-
-        {/* {isLoggedIn && (
-          <Route path="/profile">
-            <div className="card">
-              <div className="card-body">
-                <h5 className="card-title">Profile Page</h5>
-                <p className="card-text">
-                  You are logged in! Your token is {token}.
-                </p>
-              </div>
-            </div>
-          </Route>
-        )} */}
-
-
-          // const fetchMovie = async (searchTitle) => {
-  //   try {
-  //     const res = await searchMovie(searchTitle);
-  //     setSearchMovies(res);
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error('errors.');
-  //   }
-  // };
-  //   try {
-  //     const results = await searchMovie(title); // Call the searchMovie function
-  //     setSearchMovies(results); // Update searchResults state with the search results
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error('Unable to search for movies.');
-  //   }
-  // };

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Navbar({ loggedIn, setLoggedIn }) {
   const history = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -10,6 +11,18 @@ function Navbar({ loggedIn, setLoggedIn }) {
     history('/');
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm) {
+      history({
+        pathname: '/multiSearch',
+        search: `?query=${searchTerm}`,
+        state: { searchTerm },
+      });
+      setSearchTerm('');
+    }
+  };
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
@@ -35,18 +48,30 @@ function Navbar({ loggedIn, setLoggedIn }) {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/search">
-                Search Movies
-              </Link>
+              <form>
+                <div className="input-group">
+                  <input
+                    className="form-control"
+                    type="search"
+                    placeholder="Search movies"
+                    aria-label="Search"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                  <div className="input-group-append">
+                  <button className="btn btn-outline-secondary" type="button" onClick={handleSearch}>
+                        <i className="fa fa-search"></i>
+                      </button>
+                  </div>
+                </div>
+              </form>
             </li>
             {loggedIn ? (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/" onClick={handleLogout}>
-                    Logout
-                  </Link>
-                </li>
-              </>
+              <li className="nav-item">
+                <Link className="nav-link" to="/" onClick={handleLogout}>
+                  Logout
+                </Link>
+              </li>
             ) : (
               <>
                 <li className="nav-item">
