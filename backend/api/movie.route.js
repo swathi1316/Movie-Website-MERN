@@ -3,9 +3,13 @@ import searchMovie from '../api_calls/movieDetails.js';
 import UserController from "./user.controller.js";
 import recentMovie from "../api_calls/recentMovie.js";
 import popularMovie from "../api_calls/popular.js";
+import MovieSearch from '../api_calls/movieSearch.js';
+import MultiSearch from '../api_calls/multiSearch.js';
 import appMiddleware from '../auth.js';
 import app from "../server.js";
 import reviewController from "./reviews.controller.js";
+import ratingController from "./ratings.controller.js";
+import PeopleDetails from "../api_calls/peopleDetails.js";
 const router = express.Router();
 
 
@@ -26,6 +30,59 @@ router.route("/").get((req, res) => {
       });
 
   });
+  router.route("/searchMovie").get((req, res) => {
+    // Handle GET request to /users
+    const title = req.query.title;
+    MovieSearch(title)
+      .then(data => {
+        const movie = data.results;
+        console.log("movie:",movie);
+        res.send(movie);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: "Unable to fetch data" });
+      });
+
+  });
+  router.route("/multiSearch").get((req, res) => {
+    // Handle GET request to /users
+    const query = req.query.query;
+    console.log("query,",query);
+    MultiSearch(query)
+      .then(data => {
+        const movie = data.results;
+        console.log("movie:",movie);
+        res.send(movie);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: "Unable to fetch data" });
+      });
+
+  });
+
+  //----------------------------------------
+  router.route("/peopleDetails/:person_id").get((req, res) => {
+    // Handle GET request to /users
+
+    const person_id = req.params.person_id;
+    console.log("query,",person_id);
+    PeopleDetails(person_id)
+      .then(data => {
+        const movie = data;
+        console.log("movie:",movie);
+        res.send(movie);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: "Unable to fetch data" });
+      });
+
+  });
+
+
+  //------------------------------------------------
   router.route("/popular")
   .get(UserController.authenticateToken, (req, res) => {
     const currentUser = req.user.userId;
@@ -56,10 +113,18 @@ router.route("/").get((req, res) => {
   });
   router.post("/register", UserController.registerUser);
   router.post("/login", UserController.loginUser);
+  
   router.post("/review", UserController.authenticateToken,reviewController.createReview);
   router.get("/review/:movieId", reviewController.getReviews);
   router.put("/review/:id", UserController.authenticateToken,reviewController.updateReviews);
   router.delete("/review/:id", UserController.authenticateToken,reviewController.deleteReview);
+
+  router.post("/rating", UserController.authenticateToken,ratingController.createRatings);
+  router.get("/rating/:movieId", ratingController.getRatings);
+  router.put("/rating/:id", UserController.authenticateToken,ratingController.updateRatings);
+ 
+
+
 
 
 

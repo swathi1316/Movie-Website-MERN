@@ -73,19 +73,27 @@ export default class reviewController {
   static async deleteReview(request,response)
 {
   const id = request.params.id;
+  console.log("review userId,",request.user.userId);
   try {
-    const deletedReview = await reviewModel.findByIdAndDelete(id);
-    if (!deletedReview) {
+    const review = await reviewModel.findById(id);
+    if (!review) {
       response.status(404).send('Review not found');
-    } else {
-      console.log(`Deleted review with ID: ${id}`);
-      response.send(`Deleted review with ID: ${id}`);
+      return;
     }
+    if (review.userId.toString()!== request.user.userId) {
+      console.log("review user Id, user id",review.userId,request.user.userId);
+      response.status(403).send('Forbidden');
+      return;
+    }
+    const deletedReview = await reviewModel.findByIdAndDelete(id);
+    console.log(`Deleted review with ID: ${id}`);
+    response.send(`Deleted review with ID: ${id}`);
   } catch (err) {
     console.log(err);
     response.status(500).send(err.message);
   }
 }
+
 
 }
 
