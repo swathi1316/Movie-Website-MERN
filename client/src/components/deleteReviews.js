@@ -1,10 +1,16 @@
+import {useState} from 'react';
 import { FaTrashAlt} from 'react-icons/fa';
 import { deleteReviews } from '../services/deleteReviews.js';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate,useLocation} from 'react-router-dom';
+import { useEffect } from 'react';
 function DeleteReviews(props) {
-
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const location = useLocation();
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, [location]);
 
   const handleDelete = async (reviewId) => {
     if(token)

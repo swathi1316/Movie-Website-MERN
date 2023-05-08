@@ -2,6 +2,19 @@ import React, { useState } from 'react';
 import { registerUser } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
 import './register.css';
+import {
+  MDBBtn,
+  MDBContainer,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBSelect,
+  MDBIcon
+}
+from 'mdb-react-ui-kit';
 
 function Register() {
   const [name, setName] = useState('');
@@ -10,16 +23,7 @@ function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
 
-  const divStyle = {
-    backgroundImage: `url("https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp")`,
-  };
-
-  const cardStyle =
-  {
-    borderRadius: `15px`,
-  }
-
-
+ 
   async function handleRegisterSubmit(event) {
     event.preventDefault();
     if (password !== confirmPassword) {
@@ -36,65 +40,54 @@ function Register() {
   }
 
   return (
-    <section class="vh-100 bg-image"
-  style={divStyle}>
-      <div class="mask d-flex align-items-center h-100 gradient-custom-3">
-        <div class="container h-100">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-            <div class="card" style={cardStyle}>
-                <div class="card-body p-5">
-                  <h2 class="text-uppercase text-center mb-5">Create an account</h2>
-                  <form class ="mt-5" onSubmit={handleRegisterSubmit}>
+    <MDBContainer className="my-5">
 
-                    <div class="form-outline mb-4">
-                      <input type="text" id="form3Example1cg" class="form-control form-control-lg" value={name}
-                                                            onChange={(event) => setName(event.target.value)}/>
-                      <label class="form-label" for="form3Example1cg">Your Name</label>
-                    </div>
+    <MDBCard>
+      <MDBRow className='g-0'>
 
-                    <div class="form-outline mb-4">
-                      <input type="email" id="form3Example3cg" class="form-control form-control-lg" value={email}
-                                                            onChange={(event) => setEmail(event.target.value)}/>
-                      <label class="form-label" for="form3Example3cg">Your Email</label>
-                    </div>
+        <MDBCol md='6'>
+        <MDBCardImage src='https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp' alt="login form" className='rounded-start w-100'/>
+        </MDBCol>
 
-                    <div class="form-outline mb-4">
-                      <input type="password" id="form3Example4cg" class="form-control form-control-lg" value={password}
-                                                            onChange={(event) => setPassword(event.target.value)} />
-                      <label class="form-label" for="form3Example4cg">Password</label>
-                    </div>
+        <MDBCol md='6'>
+          <MDBCardBody className='d-flex flex-column'>
 
-                    <div class="form-outline mb-4">
-                      <input type="password" id="form3Example4cdg" class="form-control form-control-lg" value={confirmPassword}
-                                                            onChange={(event) => setConfirmPassword(event.target.value)}/>
-                      <label class="form-label" for="form3Example4cdg">Repeat your password</label>
-                    </div>
-
-                    <div class="form-check d-flex justify-content-center mb-5">
-                      <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
-                      <label class="form-check-label" for="form2Example3cg">
-                        I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
-                      </label>
-                    </div>
-
-                    <div class="d-flex justify-content-center">
-                      <button type="button"
-                        class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Register</button>
-                    </div>
-
-                    <p class="text-center text-muted mt-5 mb-0">Have already an account? <a href="/login"
-                        class="fw-bold text-body"><u>Login here</u></a></p>
-
-                  </form>
-
-                </div>
-              </div>
+            <div className='d-flex flex-row mt-2'>
+              <MDBIcon fas icon="cubes fa-3x me-3" style={{ color: '#ff6219' }}/>
+              <span className="h1 fw-bold mb-0"></span>
             </div>
-          </div>
-        </div>
-      </div>
-      </section>
+
+            <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Create an Account</h5>
+              <MDBInput wrapperClass='mb-4' label='Name'  id='formControlLg' type='name' size="lg" value={name}
+                                                            onChange={(event) => setName(event.target.value)}/>
+              <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' type='email' size="lg" value={email} onChange={(event) => setEmail(event.target.value)}/>
+              <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(event) => setPassword(event.target.value)}/>
+              <MDBInput
+                wrapperClass='mb-4'
+                label='Repeat your password'
+                id='formControlLg'
+                type='password'
+                size='lg'
+                value={confirmPassword}
+                onChange={(event) => setConfirmPassword(event.target.value)}
+              />
+              <MDBBtn type='submit' className="mb-4 px-5" color='dark' size='lg' onClick={handleRegisterSubmit}>
+              Register
+            </MDBBtn>
+            <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Already had an account? <a href="/login" style={{color: '#393f81'}}>Login here</a></p>
+
+            <div className='d-flex flex-row justify-content-start'>
+              <a href="#!" className="small text-muted me-1">Terms of use.</a>
+              <a href="#!" className="small text-muted">Privacy policy</a>
+            </div>
+
+          </MDBCardBody>
+        </MDBCol>
+
+      </MDBRow>
+    </MDBCard>
+
+    </MDBContainer>
   );
 }
 

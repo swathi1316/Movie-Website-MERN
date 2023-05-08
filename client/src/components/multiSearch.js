@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom';
 import { movieSearched } from '../services/multiSearch.js';
 import { useLocation } from 'react-router-dom';
 
-function MultiSearch(props) {
+function MultiSearch() {
   const [searchedMoviesList, setSearchedMoviesList] = useState([]);
   const location = useLocation();
   const searchQuery = new URLSearchParams(location.search).get('query');
-  const { tvMedia, setTvMedia, peopleMedia, setPeopleMedia } = props;
   console.log("searchQuery,", searchQuery);
 
   useEffect(() => {
@@ -22,21 +21,6 @@ function MultiSearch(props) {
     fetchSearchedMovies();
   }, [searchQuery]);
 
-  const handleTvClick = (media) => {
-    // Check if media is already present in tvMedia list
-    const mediaIds = tvMedia.map((item) => item.id);
-    if (!mediaIds.includes(media.id)) {
-      setTvMedia([...tvMedia, media]);
-    }
-  }
-
-  const handlePeopleClick = (media) => {
-    // Check if media is already present in peopleMedia list
-    const mediaIds = peopleMedia.map((item) => item.id);
-    if (!mediaIds.includes(media.id)) {
-      setPeopleMedia([...peopleMedia, media]);
-    }
-  }
 
   if (!searchedMoviesList || searchedMoviesList.length === 0) {
     return <div>No recent movies to display</div>;
@@ -62,7 +46,6 @@ function MultiSearch(props) {
                     e.target.src =
                       'https://via.placeholder.com/300x450?text=Image+not+found';
                   }}
-                  onClick={() => handlePeopleClick(media)}
                 />
               </Link>
               <div className="card-body">
@@ -92,7 +75,7 @@ function MultiSearch(props) {
               {console.log("media_in_search",media)}
               <Link
                   to={{
-                    pathname: `/tv/${media.id}`
+                    pathname: `/tvDetails/${media.id}`
                   }}
                 >
                 <img
@@ -104,7 +87,6 @@ function MultiSearch(props) {
                     e.target.src =
                       'https://via.placeholder.com/300x450?text=Image+not+found';
                   }}
-                  onClick={() => handleTvClick(media)}
                 />
               </Link>
               <div className="card-body">

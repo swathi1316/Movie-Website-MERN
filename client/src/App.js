@@ -12,13 +12,12 @@ import Navbar from './components/Navbar.js';
 import { useNavigate } from 'react-router-dom';
 import PopularMovies from './components/popularMovies.js';
 import MultiSearch from './components/multiSearch.js';
-import TvShowDetails from './components/tvShowDetails.js';
+import TvDetails from './components/tvDetails.js';
 import PeopleDetails from './components/peopleDetails.js';
+
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token') ? true : false);
-  const [tvMedia,setTvMedia] = useState([]);
-  const [peopleMedia,setPeopleMedia] = useState([]);
   return (
     <Router>
       <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
@@ -29,9 +28,10 @@ function App() {
           <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
           <Route path="/register" Component={Register} />
           <Route path="/popular" Component={PopularMovies} />
-          <Route path="/multiSearch" element={<MultiSearch  tvMedia={tvMedia} setTvMedia ={setTvMedia}  peopleMedia={peopleMedia} setPeopleMedia ={setPeopleMedia} />}/>
-          <Route path="/tv/:id" element={<TvShowDetails tvMedia={tvMedia}/>} />
+          <Route path="/multiSearch" Component={MultiSearch} />
+          <Route path="/tvDetails/:id" Component={TvDetails}   />
           <Route path="/person/:id" Component={PeopleDetails} />
+
 
 
 

@@ -12,8 +12,11 @@ function RatingForm(props) {
   const [text, setText] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const [token, setToken] = useState('');
 
-  const token = localStorage.getItem('token');
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, [location]);
 
   useEffect(() => {
     if (token) {
@@ -33,7 +36,7 @@ function RatingForm(props) {
         movieId: parseInt(props.movieId),
         rating: tenRating,
       };
-
+      console.log("data,",data);
       console.log("ratings props,", props.ratings);
       const existingRating = props.ratings?.find(
         (rating) => rating.movieId === data.movieId && rating.userId === data.userId
@@ -60,6 +63,7 @@ function RatingForm(props) {
           .then((response) => {
             console.log("updated Response,", response.data);
             props.addRating(response.data);
+            
             alert('Review submitted successfully!');
           })
           .catch((error) => {

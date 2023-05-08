@@ -4,8 +4,9 @@ import ReviewList from './getReviews.js';
 import ReviewForm from './addReview.js';
 import RatingForm from './addRating.js';
 import jwt_decode from 'jwt-decode';
+import {getRating} from '../services/getRatings.js';
 
-function MovieReviews(props) {
+function MovieReviews({ movieId, updateAverageRating }) {
   const [reviews, setReviews] = useState([]);
   const [ratings, setRatings] = useState([]);
   const [currentUserId, setCurrentUserId] = useState('');
@@ -13,7 +14,7 @@ function MovieReviews(props) {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await http.get(`/review/${props.movieId}`);
+        const response = await http.get(`/review/${movieId}`);
         setReviews(response.data);
       } catch (error) {
         console.log(error);
@@ -22,16 +23,32 @@ function MovieReviews(props) {
     };
 
     fetchReviews();
-  }, [props.movieId]);
+  }, [movieId]);
 
   const token = localStorage.getItem('token');
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (token) {
       const decodedToken = jwt_decode(token);
       setCurrentUserId(decodedToken.userId);
+      const fetchRatings = async () => {
+        try {
+          const response = await getRating(movieId);
+          console.log("ratings data,",response);
+          setRatings(response);
+          console.log("ratings,",response);
+          updateAverageRating(response);
+        } catch (error) {
+          console.log(error);
+          console.log('Error fetching ratings. Please try again later.');
+        }
+      };
+      fetchRatings();
     }
-  }, []);
+  }, [token, movieId, updateAverageRating]);
+  
+  
 
   const addReview = (review) => {
     setReviews([...reviews, review]);
@@ -48,44 +65,37 @@ function MovieReviews(props) {
   };
 
   const deleteReview = (deletedReview) => {
-    console.log("delete review,",deleteReview);
-    const filterReviews = reviews.filter(review => review._id === deletedReview._id);
-    console.log("filter Reviews,",filterReviews);
     const filteredReviews = reviews.filter(review => review._id !== deletedReview._id);
     setReviews(filteredReviews);
   };
 
-
-
-  useEffect(() => {
-    console.log('Ratings have been updated:', ratings);
-  }, [ratings]);
-
   const addRating = async (rating) => {
-    console.log("rating in addRating,",rating);
     setRatings([...ratings, rating]);
+    updateAverageRating(rating);
   };
 
   const updateRating = async (updatedRating) => {
-      const updatedRatings = ratings.map(rating => {
-        if (rating._id === updatedRating._id) {
-          return updatedRating;
-        }
-        return rating;
-      });
-      setRatings(updatedRatings);
+    const updatedRatings = ratings.map(rating => {
+      if (rating._id === updatedRating._id) {
+        return updatedRating;
+      }
+      return rating;
+    });
+    setRatings(updatedRatings);
+    updateAverageRating(updatedRatings);
   };
 
   return (
     <div>
-      <ReviewList reviews={reviews} ratings ={ratings} deleteReview={deleteReview} movieId = {props.movieId} userId ={currentUserId} />
-      <ReviewForm movieId={props.movieId} reviews={reviews} addReview={addReview} updateReview={updateReview}/>
-      <RatingForm movieId={props.movieId} ratings = {ratings} addRating={addRating} updateRating={updateRating} />
+      <ReviewList reviews={reviews} ratings={ratings} deleteReview={deleteReview} movieId={movieId} userId={currentUserId} />
+      <ReviewForm movieId={movieId} reviews={reviews} addReview={addReview} updateReview={updateReview} />
+      <RatingForm movieId={movieId} ratings={ratings} addRating={addRating} updateRating={updateRating} />
     </div>
   );
 }
 
 export default MovieReviews;
+
 
 
 
