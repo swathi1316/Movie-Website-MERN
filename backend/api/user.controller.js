@@ -57,7 +57,7 @@ export default class UserController {
           userEmail: user.email,
         },
         secret_key, // Use the same secret key here
-        { expiresIn: "5h" }
+        { expiresIn: "24h" }
       );
 
       response.status(200).send({
@@ -77,7 +77,7 @@ export default class UserController {
     try {
       const authHeader = req.headers["authorization"];
       const token = authHeader && authHeader.split(" ")[1];
-
+      console.log("refresh token in backend,",token);
       if (!token) {
         return res.sendStatus(401);
       }
@@ -87,7 +87,7 @@ export default class UserController {
           console.log("Error verifying token:", err);
           return res.sendStatus(403);
         }
-
+        console.log("req.user,",req.user);
         req.user = user;
         next();
       });
@@ -98,4 +98,36 @@ export default class UserController {
       });
     }
   }
+
+
+  // static async refreshToken(request, response) {
+  //   try {
+  //     const refreshToken = request.body.refreshToken;
+
+  //     console.log("refresh token in backend,",refreshToken);
+  
+  //     // Verify the refresh token
+  //     const decoded = jwt.verify(refreshToken, secret_key);
+
+  //     console.log("decoded,",decoded);
+  
+  //     // Extract the user ID from the token payload
+  //     const userId = decoded.userId;
+  
+  //     // Generate a new access token with a longer expiration time
+  //     const newAccessToken = jwt.sign(
+  //       {
+  //         userId: userId,
+  //       },
+  //       secret_key,
+  //       { expiresIn: '5m' } // Set a longer expiration time for the new access token
+  //     );
+  //     console.log("new access token in backend,",newAccessToken);
+  //     // Return the new access token as the response
+  //     response.status(200).json({ token: newAccessToken });
+  //   } catch (error) {
+  //     response.status(401).json({ message: 'Invalid refresh token' });
+  //   }
+  // }
+  
 }

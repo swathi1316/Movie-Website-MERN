@@ -10,6 +10,7 @@ import app from "../server.js";
 import reviewController from "./reviews.controller.js";
 import ratingController from "./ratings.controller.js";
 import PeopleDetails from "../api_calls/peopleDetails.js";
+import TvDetails from "../api_calls/tvDetails.js";
 const router = express.Router();
 
 
@@ -81,6 +82,27 @@ router.route("/").get((req, res) => {
 
   });
 
+  //---------------------------------------------------------
+
+
+  router.route("/tvDetails/:tv_id").get((req, res) => {
+    // Handle GET request to /users
+
+    const tv_id = req.params.tv_id;
+    console.log("query,",tv_id);
+    TvDetails(tv_id)
+      .then(data => {
+        const movie = data;
+        console.log("movie:",movie);
+        res.send(movie);
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        res.status(500).json({ error: "Unable to fetch data" });
+      });
+
+  });
+
 
   //------------------------------------------------
   router.route("/popular")
@@ -113,6 +135,8 @@ router.route("/").get((req, res) => {
   });
   router.post("/register", UserController.registerUser);
   router.post("/login", UserController.loginUser);
+  // router.post('/refresh-token', UserController.refreshToken);
+
   
   router.post("/review", UserController.authenticateToken,reviewController.createReview);
   router.get("/review/:movieId", reviewController.getReviews);
