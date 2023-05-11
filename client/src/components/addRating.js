@@ -3,8 +3,8 @@ import httpAuth from '../http-auth';
 import jwt_decode from 'jwt-decode';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { updateRating } from '../services/updateRatings.js';
-import './addRatings.css';
-import { Rating, Box } from "@mui/material";
+import { Rating, Box, Snackbar } from "@mui/material";
+import MuiAlert from '@mui/material/Alert';
 
 function RatingForm(props) {
   const [ratingNumber, setRatingNumber] = useState(0);
@@ -13,6 +13,9 @@ function RatingForm(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [token, setToken] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('');
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
@@ -50,25 +53,35 @@ function RatingForm(props) {
             if (response) {
               const updatedResponseData = { ...response };
               props.updateRating(updatedResponseData);
+              setSnackbarSeverity('success');
+              setSnackbarMessage('Rating updated successfully!');
+              setOpenSnackbar(true);
             } else {
-              alert('Error updating review. Please try again later.');
+              setSnackbarSeverity('error');
+              setSnackbarMessage('Error updating rating. Please try again later.');
+              setOpenSnackbar(true);
             }
           })
           .catch((error) => {
             console.log(error);
-            alert('Error updating review. Please try again later.');
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Error updating rating. Please try again later.');
+            setOpenSnackbar(true);
           });
       } else {
         httpAuth.post('/rating', data)
           .then((response) => {
             console.log("updated Response,", response.data);
             props.addRating(response.data);
-            
-            alert('Review submitted successfully!');
+            setSnackbarSeverity('success');
+            setSnackbarMessage('Rating submitted successfully!');
+            setOpenSnackbar(true);
           })
           .catch((error) => {
             console.log(error);
-            alert('Error submitting review. Please try again later.');
+            setSnackbarSeverity('error');
+            setSnackbarMessage('Error submitting rating. Please try again later.');
+            setOpenSnackbar(true);
           });
       }
     } else {
@@ -81,7 +94,14 @@ function RatingForm(props) {
       });
     }
   };
- 
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
   return (
     <Box sx={{ pt: 2 }}>
       <Rating 
@@ -89,8 +109,23 @@ function RatingForm(props) {
         size="medium"
         onChange={(event, ratingValue) => handleRatingChange(event, ratingValue)}
       />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+        >
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
     </Box>
   );
+  
 }
 
 export default RatingForm;

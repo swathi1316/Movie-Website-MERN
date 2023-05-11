@@ -26,6 +26,7 @@ function MovieReviews({ movieId, updateAverageRating }) {
   }, [movieId]);
 
   const token = localStorage.getItem('token');
+  console.log("token in movie reviews,",token);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {

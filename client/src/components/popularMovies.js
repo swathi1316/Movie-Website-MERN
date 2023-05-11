@@ -22,7 +22,6 @@ function PopularMovies() {
 
   return (
     <div className="row">
-      <h2>Popular Movies</h2>
       {popularMovieList.map((movie) => (
         <div key={movie.id} className="col-lg-3 col-md-4 col-sm-6 mb-3">
           <div className="card h-100">

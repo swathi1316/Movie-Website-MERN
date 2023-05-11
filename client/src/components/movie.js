@@ -94,7 +94,11 @@ function SearchMovie() {
       <h1 className="my-3">{movieDetails.title}</h1>
       <div className="d-flex my-3">
         <FaStar style={ratingStyle} />
-        <span>{average}</span>
+        {average !== 0 ? (
+          <span>{average}</span>
+        ) : (
+          <span>{movieDetails.vote_average}</span>
+        )}
         <span className="mx-3">|</span>
         <span style={genresStyle}>
           {movieDetails.genres?.map((genre) => genre.name).join(", ")}
@@ -166,11 +170,9 @@ function SearchMovie() {
   </div>
 </div>
 
-
-
 <div className="container my-2" style={{ position: "absolute", top: "1400px", zIndex: "0" }}>
   <div className="row">
-    <div className="mt-6">
+    <div className="mt-0">
       <h4>Reviews:</h4>
       <MovieReviews movieId={movieDetails.id} updateAverageRating={updateAverageRating} />
     </div>

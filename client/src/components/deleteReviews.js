@@ -1,47 +1,55 @@
-import {useState} from 'react';
-import { FaTrashAlt} from 'react-icons/fa';
+import { useState } from 'react';
+import { FaTrashAlt } from 'react-icons/fa';
 import { deleteReviews } from '../services/deleteReviews.js';
-import {useNavigate,useLocation} from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
+import DeleteReviewModal from './deleteReviewModal.js';
+
 function DeleteReviews(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [token, setToken] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
   }, [location]);
 
-  const handleDelete = async (reviewId) => {
-    if(token)
-    {
-        const confirmDelete = window.confirm("Are you sure you want to delete this review?");
-        if (confirmDelete) {
-          try {
-            await deleteReviews(reviewId);
-            console.log("reviewid,:",reviewId);
-            props.deleteReview({ _id: reviewId });
-            console.log("done");
-
-          } catch (error) {
-            console.log(error);
-            alert("Error deleting review. Please try again later.");
-          }
-        }
+  const handleDelete = async () => {
+    try {
+      await deleteReviews(props.reviewId);
+      props.deleteReview({ _id: props.reviewId });
+    } catch (error) {
+      if (error.response.status === 403) {
+        alert('You are not authorized to delete this review.');
+      } else {
+        console.log(error);
+        alert('Error deleting review. Please try again later.');
       }
-    else
-    {
-      navigate({
-        pathname: '/login',
-      });
-
     }
   };
-  
+
+  const handleShowModal = () => {
+    setShowModal(true);
+  };
+
+  const handleHideModal = () => {
+    setShowModal(false);
+  };
+
   return (
-    <FaTrashAlt onClick={() => handleDelete(props.reviewId)} />
+    <>
+      <FaTrashAlt onClick={handleShowModal} />
+      <DeleteReviewModal
+        show={showModal}
+        onHide={handleHideModal}
+        onDelete={handleDelete}
+      />
+    </>
   );
 }
 
 export default DeleteReviews;
+
+
 

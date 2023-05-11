@@ -15,19 +15,29 @@ import {
   MDBIcon
 }
 from 'mdb-react-ui-kit';
+import backgroundImage from '../static/image5.jpg';
 
 function Register() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
  
   async function handleRegisterSubmit(event) {
     event.preventDefault();
+    if (!name || !email || !password || !confirmPassword) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
     if (password !== confirmPassword) {
-      alert('Passwords do not match.');
+      setError('Passwords do not match.');
       return;
     }
     try {
@@ -36,6 +46,7 @@ function Register() {
       navigate('/login');
     } catch (error) {
       console.error(error);
+      setError('An error occurred. Please try again later.');
     }
   }
 
@@ -57,41 +68,37 @@ function Register() {
               <span className="h1 fw-bold mb-0"></span>
             </div>
 
-            <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}>Create an Account</h5>
+            <h5 className="fw-normal my-4 pb-3" style={{letterSpacing: '1px'}}><strong>Create an Account</strong></h5>
               <MDBInput wrapperClass='mb-4' label='Name'  id='formControlLg' type='name' size="lg" value={name}
                                                             onChange={(event) => setName(event.target.value)}/>
               <MDBInput wrapperClass='mb-4' label='Email address' id='formControlLg' type='email' size="lg" value={email} onChange={(event) => setEmail(event.target.value)}/>
               <MDBInput wrapperClass='mb-4' label='Password' id='formControlLg' type='password' size="lg" value={password} onChange={(event) => setPassword(event.target.value)}/>
               <MDBInput
                 wrapperClass='mb-4'
-                label='Repeat your password'
+                label='ReEnter your password'
                 id='formControlLg'
                 type='password'
                 size='lg'
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
               />
-              <MDBBtn type='submit' className="mb-4 px-5" color='dark' size='lg' onClick={handleRegisterSubmit}>
-              Register
-            </MDBBtn>
-            <p className="mb-5 pb-lg-2" style={{color: '#393f81'}}>Already had an account? <a href="/login" style={{color: '#393f81'}}>Login here</a></p>
+              {error && <div className="alert alert-danger mb-4">{error}</div>}
+              <MDBBtn className='w-100 mb-4' color='primary' onClick={handleRegisterSubmit}>
+            Create Account
+          </MDBBtn>
 
-            <div className='d-flex flex-row justify-content-start'>
-              <a href="#!" className="small text-muted me-1">Terms of use.</a>
-              <a href="#!" className="small text-muted">Privacy policy</a>
-            </div>
+          <p className='text-center mb-0'>Already have an account? <a href='/login'>Login</a></p>
 
-          </MDBCardBody>
-        </MDBCol>
+      </MDBCardBody>
+    </MDBCol>
 
-      </MDBRow>
-    </MDBCard>
-
-    </MDBContainer>
+  </MDBRow>
+</MDBCard>
+</MDBContainer>
   );
 }
-
 export default Register;
+
 
 
 // {/* <Form onSubmit={handleRegisterSubmit}>

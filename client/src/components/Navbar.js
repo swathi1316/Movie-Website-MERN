@@ -24,10 +24,10 @@ function Navbar({ loggedIn, setLoggedIn }) {
   };
   
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#D2B48C' }}>
       <div className="container">
         <Link className="navbar-brand" to="/">
-          ReviewFriday
+          MovieVerse
         </Link>
         <button
           className="navbar-toggler"

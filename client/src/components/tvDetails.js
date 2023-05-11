@@ -98,43 +98,42 @@ function TvDetails() {
               <p>No cast information available.</p>
             )}
           </div>
-
-          <div className="container mt-5">
-      <div className="row">
-        <div className="col-12 col-xl-8">
-          {tvDetails.videos && tvDetails.videos.length > 0 ? (
-            <Carousel className="my-slider mt-3" fade={true} style={{ width: '800px', height: '500px' }}>
-              {tvDetails.videos.map((video, index) => (
-                <Carousel.Item key={index}>
-                  <div className="card border-0">
-                    <div className="card-img-top position-relative">
-                      <a href={video.link} target="_blank" rel="noopener noreferrer">
-                        <img
-                          src={`https://img.youtube.com/vi/${video.link.split("v=")[1]}/hqdefault.jpg`}
-                          alt={video.name}
-                          className="img-fluid"
-                          style={{ width: '100%', height: '400px' }}
-                        />
-                      </a>
-                      <div className="position-absolute top-50 start-50 translate-middle">
-                        <a href={video.link} target="_blank" rel="noopener noreferrer">
-                          <i className="fab fa-youtube fa-3x"></i>
-                        </a>
+          <div className="container mt-5 mx-5">
+          <div className="row">
+            <div className="col-12 col-xl-8">
+              {tvDetails.videos && tvDetails.videos.length > 0 ? (
+                <Carousel className="my-slider mt-3" fade={true} style={{ width: '800px', height: '500px' }}>
+                  {tvDetails.videos.map((video, index) => (
+                    <Carousel.Item key={index}>
+                      <div className="card border-0">
+                        <div className="card-img-top position-relative">
+                          <a href={video.link} target="_blank" rel="noopener noreferrer">
+                            <img
+                              src={`https://img.youtube.com/vi/${video.link.split("v=")[1]}/hqdefault.jpg`}
+                              alt={video.name}
+                              className="img-fluid"
+                              style={{ width: '100%', height: '400px' }}
+                            />
+                          </a>
+                          <div className="position-absolute top-50 start-50 translate-middle">
+                            <a href={video.link} target="_blank" rel="noopener noreferrer">
+                              <i className="fab fa-youtube fa-3x"></i>
+                            </a>
+                          </div>
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title">{video.name}</h5>
+                        </div>
                       </div>
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title">{video.name}</h5>
-                    </div>
-                  </div>
-                </Carousel.Item>
-              ))}
-            </Carousel>
-          ) : (
-            <div className="card border-0">
-              <img src="https://via.placeholder.com/300x200.png?text=No+videos+found" className="card-img-top" alt="No videos found" />
-              <div className="card-body"></div>
-            </div>
-          )}
+                    </Carousel.Item>
+                  ))}
+                </Carousel>
+              ) : (
+                <div className="card border-0">
+                  <img src="https://via.placeholder.com/300x200.png?text=No+videos+found" className="card-img-top" alt="No videos found" />
+                  <div className="card-body"></div>
+                </div>
+              )}
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import httpAuth from '../http-auth.js';
+import http from '../http-common.js';
 
 export const popularMovie = async () => {
-  const popularMoviesList = await httpAuth.get("/popular");
+  const popularMoviesList = await http.get("/popular");
   return popularMoviesList.data;
 };

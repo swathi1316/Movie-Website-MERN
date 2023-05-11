@@ -3,6 +3,10 @@ import httpAuth from '../http-auth';
 import jwt_decode from 'jwt-decode';
 import { updateReview } from '../services/updateReviews.js';
 import { useNavigate, useLocation } from 'react-router-dom';
+import {Snackbar} from "@mui/material";
+import MuiAlert from '@mui/material/Alert';
+
+
 
 function ReviewForm(props) {
   const [review, setReview] = useState('');
@@ -12,9 +16,13 @@ function ReviewForm(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const [token, setToken] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
 
   useEffect(() => {
     setToken(localStorage.getItem('token'));
+    console.log("token in the ratings",token);
   }, [location]);
 
   useEffect(() => {
@@ -44,15 +52,23 @@ function ReviewForm(props) {
         try {
           const reviewId = existingReview._id;
           const response = await updateReview(reviewId, data);
+          console.log("data,review",response);
           if (response) {
             const updatedResponseData = { ...response, username };
             props.updateReview(updatedResponseData);
+            setSnackbarMessage('Review updated successfully!');
+            setSeverity('success');
+            setOpenSnackbar(true);
           } else {
-            alert('Error updating review. Please try again later.');
+            setSnackbarMessage('Error updating review. Please try again later.');
+            setSeverity('error');
+            setOpenSnackbar(true);
           }
         } catch (error) {
           console.log(error);
-          alert('Error updating review. Please try again later.');
+          setSnackbarMessage('Error updating review. Please try again later.');
+          setSeverity('error');
+          setOpenSnackbar(true);
         }
       } else {
         try {
@@ -60,10 +76,14 @@ function ReviewForm(props) {
           setReview('');
           const updatedResponseData = { ...response.data, username };
           props.addReview(updatedResponseData);
-          alert('Review submitted successfully!');
+          setSnackbarMessage('Review submitted successfully!');
+          setSeverity('success');
+          setOpenSnackbar(true);
         } catch (error) {
           console.log(error);
-          alert('Error submitting review. Please try again later.');
+          setSnackbarMessage('Error submitting review. Please try again later.');
+          setSeverity('error');
+          setOpenSnackbar(true);
         }
       }
     } else {
@@ -77,13 +97,22 @@ function ReviewForm(props) {
     }
   };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnackbar(false);
+  };
+
+
   return (
     <div>
       <hr />
       <h3>Write a review</h3>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="review">Your review</label>
+          <label htmlFor="review"></label>
           <textarea
             id="review"
             className="form-control"
@@ -92,10 +121,15 @@ function ReviewForm(props) {
             onChange={(event) => setReview(event.target.value)}
           ></textarea>
         </div>
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
+        <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>
+        Submit
+      </button>
       </form>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+      <MuiAlert onClose={handleCloseSnackbar} severity={severity}>
+        {snackbarMessage}
+      </MuiAlert>
+    </Snackbar>
     </div>
   );
 }
