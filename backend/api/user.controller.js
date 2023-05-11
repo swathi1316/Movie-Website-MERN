@@ -75,22 +75,29 @@ export default class UserController {
 
   static async authenticateToken(req, res, next) {
     try {
+      const request1 = req;
+      console.log("request,",request1);
+      const headers = req.headers;
+      console.log("header,",headers);
       const authHeader = req.headers["authorization"];
+      console.log("authheader,",authHeader);
       const token = authHeader && authHeader.split(" ")[1];
       console.log("refresh token in backend,",token);
       if (!token) {
         return res.sendStatus(401);
       }
 
-      jwt.verify(token, secret_key, (err, user) => {
+      jwt.verify(token, secret_key, (err, decoded) => {
         if (err) {
           console.log("Error verifying token:", err);
           return res.sendStatus(403);
         }
-        console.log("req.user,",req.user);
-        req.user = user;
+        console.log("req.user,",req.user)
+        req.user = decoded;
+        console.log("req.user,",req.user)
         next();
       });
+      
     } catch (error) {
       res.status(500).send({
         message: "Error during token authentication",

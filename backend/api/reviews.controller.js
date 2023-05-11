@@ -1,4 +1,5 @@
 import reviewModel from "../models/reviewModel.js"
+import mongoose from "mongoose";
 
 export default class reviewController {
   static async createReview(request, response) {
@@ -6,8 +7,7 @@ export default class reviewController {
       const userId = request.body.userId;
       const movieId = request.body.movieId;
       const reviewText = request.body.reviewText;
-  
-      const existingReview = await reviewModel.findOne({ userId: userId, movieId: movieId });
+      const existingReview = await reviewModel.findOne({ userId:userId, movieId: movieId });
       if (existingReview) {
         response.status(400).send('Review already exists for this movie. Please Update the review');
         return;
@@ -80,11 +80,13 @@ export default class reviewController {
       response.status(404).send('Review not found');
       return;
     }
-    if (review.userId.toString()!== request.user.userId) {
-      console.log("review user Id, user id",review.userId,request.user.userId);
+    const review_userId = review.userId.toString();
+    if ( review_userId!== String(request.user.userId)) {
+      console.log("review user Id, user id", review_userId, String(request.user.userId));
       response.status(403).send('Forbidden');
       return;
     }
+    
     const deletedReview = await reviewModel.findByIdAndDelete(id);
     console.log(`Deleted review with ID: ${id}`);
     response.send(`Deleted review with ID: ${id}`);

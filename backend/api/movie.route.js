@@ -5,7 +5,6 @@ import recentMovie from "../api_calls/recentMovie.js";
 import popularMovie from "../api_calls/popular.js";
 import MovieSearch from '../api_calls/movieSearch.js';
 import MultiSearch from '../api_calls/multiSearch.js';
-import appMiddleware from '../auth.js';
 import app from "../server.js";
 import reviewController from "./reviews.controller.js";
 import ratingController from "./ratings.controller.js";
@@ -106,9 +105,7 @@ router.route("/").get((req, res) => {
 
   //------------------------------------------------
   router.route("/popular")
-  .get(UserController.authenticateToken, (req, res) => {
-    const currentUser = req.user.userId;
-    console.log("user logged in", currentUser);
+  .get((req, res) => {
     popularMovie()
       .then(data => {
         const popularMovie = data;
