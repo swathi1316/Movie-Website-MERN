@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js";
-import bcrypt from "bcryptjs";
+import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const secret_key = "SHASHANK";
@@ -7,8 +7,8 @@ const secret_key = "SHASHANK";
 export default class UserController {
   static async registerUser(request, response) {
     try {
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(request.body.password, salt);
+      const salt = await bcryptjs.genSalt();
+      const hashedPassword = await bcryptjs.hash(request.body.password, salt);
 
       const user = new userModel({
         name: request.body.name,
@@ -40,7 +40,7 @@ export default class UserController {
         });
       }
 
-      const passwordCheck = await bcrypt.compare(
+      const passwordCheck = await bcryptjs.compare(
         request.body.password,
         user.password
       );
