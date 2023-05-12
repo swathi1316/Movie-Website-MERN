@@ -5,7 +5,6 @@ import recentMovie from "../api_calls/recentMovie.js";
 import popularMovie from "../api_calls/popular.js";
 import MovieSearch from '../api_calls/movieSearch.js';
 import MultiSearch from '../api_calls/multiSearch.js';
-import app from "../server.js";
 import reviewController from "./reviews.controller.js";
 import ratingController from "./ratings.controller.js";
 import PeopleDetails from "../api_calls/peopleDetails.js";
