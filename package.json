@@ -4,11 +4,13 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "client-install": "npm install --prefix client",
+    "server": "node server.js",
+    "client-build": "--prefix client  npm run build",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --runInBand --forceExit",
-    "client-install": "cd client && npm install",
-    "client-build": "cd client && npm run build",
-    "heroku-postbuild": "npm run client-install && npm run client-build"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",

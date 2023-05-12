@@ -20,7 +20,6 @@ router.route("/").get((req, res) => {
     recentMovie()
       .then(data => {
         const movie = data.results;
-        console.log("movie:",movie);
         res.send(movie);
       })
       .catch(error => {
