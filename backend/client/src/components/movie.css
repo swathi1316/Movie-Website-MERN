@@ -1,0 +1,44 @@
+/* .my-slider {
+  background-color: #f2f2f2;
+} */
+
+
+  
+  .videos-container {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(10px);
+  }
+  
+  .videos-wrapper {
+    max-width: 1000px;
+  }
+  
+  .videos-wrapper > * {
+    flex-basis: calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .videos-wrapper > * {
+      flex-basis: calc(50% - 20px);
+      max-width: calc(50% - 20px);
+    }
+  }
+
+  .card-img-top {
+    height: 400px; /* adjust as needed */
+    overflow: hidden;
+  }
+  
+  .card-img-top img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+
+  .container-reviews {
+    margin-top: 2rem;
+  }
