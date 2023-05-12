@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/movies", movies);
+app.use("/", movies);
 
 if (process.env.NODE_ENV === "production") {
   console.log("one going");

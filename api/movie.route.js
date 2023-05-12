@@ -13,8 +13,6 @@ const router = express.Router();
 
 
 
-
-
 router.route("/").get((req, res) => {
     // Handle GET request to /users
     recentMovie()
