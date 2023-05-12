@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js";
-import bcryptjs from "bcryptjs";
+import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 const secret_key = "SHASHANK";
@@ -7,8 +7,7 @@ const secret_key = "SHASHANK";
 export default class UserController {
   static async registerUser(request, response) {
     try {
-      const salt = await bcryptjs.genSalt();
-      const hashedPassword = await bcryptjs.hash(request.body.password, salt);
+      const hashedPassword = await argon2.hash(request.body.password);
 
       const user = new userModel({
         name: request.body.name,
@@ -40,9 +39,9 @@ export default class UserController {
         });
       }
 
-      const passwordCheck = await bcryptjs.compare(
-        request.body.password,
-        user.password
+      const passwordCheck = await argon2.verify(
+        user.password,
+        request.body.password
       );
 
       if (!passwordCheck) {
@@ -50,7 +49,7 @@ export default class UserController {
           message: "Passwords do not match",
         });
       }
-      console.log(secret_key);
+      
       const token = jwt.sign(
         {
           userId: user._id,
@@ -104,37 +103,6 @@ export default class UserController {
         error,
       });
     }
-  }
-
-
-  // static async refreshToken(request, response) {
-  //   try {
-  //     const refreshToken = request.body.refreshToken;
-
-  //     console.log("refresh token in backend,",refreshToken);
-  
-  //     // Verify the refresh token
-  //     const decoded = jwt.verify(refreshToken, secret_key);
-
-  //     console.log("decoded,",decoded);
-  
-  //     // Extract the user ID from the token payload
-  //     const userId = decoded.userId;
-  
-  //     // Generate a new access token with a longer expiration time
-  //     const newAccessToken = jwt.sign(
-  //       {
-  //         userId: userId,
-  //       },
-  //       secret_key,
-  //       { expiresIn: '5m' } // Set a longer expiration time for the new access token
-  //     );
-  //     console.log("new access token in backend,",newAccessToken);
-  //     // Return the new access token as the response
-  //     response.status(200).json({ token: newAccessToken });
-  //   } catch (error) {
-  //     response.status(401).json({ message: 'Invalid refresh token' });
-  //   }
-  // }
-  
+  }  
 }
+
