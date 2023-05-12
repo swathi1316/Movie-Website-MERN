@@ -25,11 +25,13 @@
     "jwt-decode": "^3.1.2",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.2",
-    "node": "^20.1.0",
     "nodemon": "^2.0.21",
     "supertest": "^6.3.3"
   },
   "devDependencies": {
     "jest": "^29.5.0"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
