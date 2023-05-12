@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --verbose --runInBand --forceExit",
-    "client-install":"cd client && npm install",
+    "client-install": "cd client && npm install",
     "client-build": "cd client && npm run build",
     "heroku-postbuild": "npm run client-install && npm run client-build"
   },
@@ -26,6 +26,7 @@
     "jwt-decode": "^3.1.2",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.2",
+    "node": "^20.1.0",
     "nodemon": "^2.0.21",
     "supertest": "^6.3.3"
   },
