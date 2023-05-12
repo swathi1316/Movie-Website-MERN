@@ -17,6 +17,17 @@ if (process.env.NODE_ENV === "production") {
   console.log("one going");
   app.use("/",express.static("client/build"));
 }
+else
+{
+  // Serve the index.html file for any unmatched routes
+  app.get("*", (req, res) => {
+    const indexHtmlPath = path.join(
+      path.dirname(new URL(import.meta.url).pathname),
+      "client/build/index.html"
+    );
+    res.sendFile(indexHtmlPath);
+  });
+}
 
 dbConnect()
   .then(() => {
