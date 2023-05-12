@@ -1,5 +1,4 @@
 import userModel from "../models/userModel.js";
-import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 
 const secret_key = "SHASHANK";
@@ -7,12 +6,10 @@ const secret_key = "SHASHANK";
 export default class UserController {
   static async registerUser(request, response) {
     try {
-      const hashedPassword = await argon2.hash(request.body.password);
-
       const user = new userModel({
         name: request.body.name,
         email: request.body.email,
-        password: hashedPassword,
+        password: request.body.password,
       });
 
       const result = await user.save();
@@ -39,12 +36,7 @@ export default class UserController {
         });
       }
 
-      const passwordCheck = await argon2.verify(
-        user.password,
-        request.body.password
-      );
-
-      if (!passwordCheck) {
+      if (user.password !== request.body.password) {
         return response.status(400).send({
           message: "Passwords do not match",
         });
@@ -74,12 +66,8 @@ export default class UserController {
 
   static async authenticateToken(req, res, next) {
     try {
-      const request1 = req;
-      console.log("request,",request1);
       const headers = req.headers;
-      console.log("header,",headers);
       const authHeader = req.headers["authorization"];
-      console.log("authheader,",authHeader);
       const token = authHeader && authHeader.split(" ")[1];
       console.log("refresh token in backend,",token);
       if (!token) {
@@ -105,4 +93,3 @@ export default class UserController {
     }
   }  
 }
-
