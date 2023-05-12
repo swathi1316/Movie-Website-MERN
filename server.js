@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import movies from "./api/movie.route.js";
-import { dbConnect, mongoose } from './dbConnect.js';
+import dbConnect ,{mongoose} from './dbConnect.js';
 import path from "path";
 
 const port = process.env.PORT || 5000;
