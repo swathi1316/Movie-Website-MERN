@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-    baseURL: "https://movie-verse.herokuapp.com/",
+    baseURL: "",
   headers: {
     "Content-type": "application/json"
   }
