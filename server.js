@@ -14,9 +14,12 @@ app.use(express.json());
 app.use("/", movies);
 
 if(process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.resolve(process.cwd(), "client/build")));
+  app.use(express.static(path.resolve(process.cwd(), "./client/build")));
+}
+else
+{
   app.get("*", (request, response) => {
-    response.sendFile(path.resolve(process.cwd(), "client/build", "index.html"));
+    response.sendFile(path.resolve(process.cwd(), "./client/build", "index.html"));
   });
 }
 
