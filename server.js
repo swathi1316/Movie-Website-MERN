@@ -11,11 +11,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use("/", movies);
+app.use("/movies", movies);
 
 if (process.env.NODE_ENV === "production") {
   console.log("one going");
-  app.use(express.static("client/build"));
+  app.use("/",express.static("client/build"));
 }
 else
 {
