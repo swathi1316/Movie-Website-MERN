@@ -1,8 +1,8 @@
 import express from "express";
 import cors from "cors";
 import movies from "./api/movie.route.js";
-import dbConnect from './dbConnect.js';
-import {mongoose} from './dbConnect.js';
+import { dbConnect, mongoose } from './dbConnect.js';
+import path from "path";
 
 const port = process.env.PORT || 5000;
 
@@ -13,13 +13,11 @@ app.use(express.json());
 
 app.use("/", movies);
 
-app.use("*", (req, res) =>
-  res.status(404).json({ error: "Unable to connect" })
-);
-
-if(process.env.NODE_ENV === 'production')
-{
-  app.use(express.static('./client/build'))
+if(process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.resolve(process.cwd(), "client/build")));
+  app.get("*", (request, response) => {
+    response.sendFile(path.resolve(process.cwd(), "client/build", "index.html"));
+  });
 }
 
 dbConnect()
@@ -32,9 +30,8 @@ dbConnect()
     console.error(error);
   });
 
+export default app;
 
-
-export {app};
 
 
 
