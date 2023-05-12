@@ -1,7 +1,7 @@
-import React ,{useState,useEffect} from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import {latestMovies} from '../services/recentMovie.js'
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
+import { latestMovies } from "../services/recentMovie.js";
 
 function RecentMovies() {
   const [latestMoviesList, setLatestMoviesList] = useState([]);
@@ -9,8 +9,10 @@ function RecentMovies() {
   useEffect(() => {
     const fetchLatestMovies = async () => {
       const movies = await latestMovies();
-      console.log("app.js movies, ",movies);
-      setLatestMoviesList(movies);
+      console.log("app.js movies, ", movies);
+      if (Array.isArray(movies)) {
+        setLatestMoviesList(movies);
+      }
     };
     fetchLatestMovies();
   }, []);
@@ -25,7 +27,11 @@ function RecentMovies() {
         <div key={movie.id} className="col-lg-3 col-md-4 col-sm-6 mb-3">
           <div className="card h-100">
             <Link to={`/search?title=${movie.title}`}>
-              <img src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`} alt={movie.title} className="card-img-top" />
+              <img
+                src={`https://image.tmdb.org/t/p/w300/${movie.poster_path}`}
+                alt={movie.title}
+                className="card-img-top"
+              />
             </Link>
             <div className="card-body">
               <h5 className="card-title">{movie.title}</h5>
@@ -43,20 +49,8 @@ RecentMovies.propTypes = {
       id: PropTypes.number.isRequired,
       title: PropTypes.string.isRequired,
       poster_path: PropTypes.string,
-    }),
+    })
   ),
 };
 
 export default RecentMovies;
-
-
-
-///--------------------useeffect
-// useEffect(() => {
-//     const fetchLatestMovies = async () => {
-//       const movies = await latestMovies();
-//       console.log("app.js movies, ",movies);
-      
-//     };
-//     fetchLatestMovies();
-//   }, []);
