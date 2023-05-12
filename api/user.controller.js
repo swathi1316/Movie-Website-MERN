@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const secret_key = "SHASHANK";
@@ -6,10 +7,13 @@ const secret_key = "SHASHANK";
 export default class UserController {
   static async registerUser(request, response) {
     try {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(request.body.password, salt);
+
       const user = new userModel({
         name: request.body.name,
         email: request.body.email,
-        password: request.body.password,
+        password: hashedPassword,
       });
 
       const result = await user.save();
@@ -36,12 +40,17 @@ export default class UserController {
         });
       }
 
-      if (user.password !== request.body.password) {
+      const passwordCheck = await bcrypt.compare(
+        request.body.password,
+        user.password
+      );
+
+      if (!passwordCheck) {
         return response.status(400).send({
           message: "Passwords do not match",
         });
       }
-      
+      console.log(secret_key);
       const token = jwt.sign(
         {
           userId: user._id,
@@ -66,8 +75,12 @@ export default class UserController {
 
   static async authenticateToken(req, res, next) {
     try {
+      const request1 = req;
+      console.log("request,",request1);
       const headers = req.headers;
+      console.log("header,",headers);
       const authHeader = req.headers["authorization"];
+      console.log("authheader,",authHeader);
       const token = authHeader && authHeader.split(" ")[1];
       console.log("refresh token in backend,",token);
       if (!token) {
@@ -91,5 +104,6 @@ export default class UserController {
         error,
       });
     }
-  }  
+  }
+  
 }

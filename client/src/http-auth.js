@@ -4,7 +4,7 @@ import axios from 'axios';
 import { getAuthHeader } from './services/authService.js';
 
 const httpAuth = axios.create({
-  baseURL: "https://movie-verse.herokuapp.com",
+  baseURL: "http://localhost:5000",
 });
 
 // Set the authorization header for all requests using the getAuthHeader function
