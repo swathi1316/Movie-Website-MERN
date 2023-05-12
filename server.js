@@ -4,7 +4,7 @@ import movies from "./api/movie.route.js";
 import dbConnect from './dbConnect.js';
 import {mongoose} from './dbConnect.js';
 
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 5000;
 
 const app = express();
 
